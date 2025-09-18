@@ -9,10 +9,10 @@
     html,body{
       height:100%;margin:0;
       font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
-      overflow: hidden; /* ẩn thanh kéo */
+      overflow: hidden;
     }
     body{
-      background-color: #d88a92; /* màu hồng như trong ảnh bạn gửi */
+      background-color: #d88a92;
       color:var(--text);
       display:flex;
       align-items:center;
@@ -22,7 +22,7 @@
       width:min(980px,94vw);
       height:100vh;width:100vw;
       box-sizing:border-box;
-      background:rgba(255,255,255,0.15); /* nền sáng để chữ dễ nhìn */
+      background:rgba(255,255,255,0.15);
       backdrop-filter:blur(1px);
       border-radius:0;
       padding:36px 28px;
@@ -36,10 +36,9 @@
       text-align:center;
       padding-top:80px;
     }
-    h1{font-size:58px;margin:0 0 20px 0;color:var(--accent);letter-spacing:1px}
-    p.lead{margin:0 0 20px 0;font-size:20px;}
+    h1{font-size:64px;margin:0 0 20px 0;color:var(--accent);letter-spacing:1px}
+    p.lead{margin:0 0 20px 0;font-size:24px;}
 
-    /* hiệu ứng chữ trắng nhấp nháy */
     .blink-white {
       color:white;
       animation: blink 1.5s infinite;
@@ -49,11 +48,10 @@
       50% { opacity: 0.6; }
     }
 
-    /* trái tim rơi */
     .heart {
       position:absolute;
       top:-10%;
-      color:#ffb6c1; /* hồng nhạt */
+      color:#ffb6c1;
       font-size:20px;
       opacity:0.9;
       animation: fall linear forwards;
@@ -63,7 +61,25 @@
       100%{transform:translateY(120vh) rotate(360deg) translateX(120px);opacity:0}
     }
 
-    @media (max-width:520px){h1{font-size:40px} .card{padding:20px;padding-top:60px}}
+    /* nút bật/tắt nhạc */
+    #music-toggle {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(255,255,255,0.4);
+      color: #333;
+      border: none;
+      border-radius: 20px;
+      padding: 8px 14px;
+      cursor: pointer;
+      font-size: 18px;
+      transition: background 0.3s;
+    }
+    #music-toggle:hover {
+      background: rgba(255,255,255,0.6);
+    }
+
+    @media (max-width:520px){h1{font-size:46px} .card{padding:20px;padding-top:60px} p.lead{font-size:20px}}
   </style>
 </head>
 <body>
@@ -75,16 +91,32 @@
   </div>
 
   <audio id="bg-music" src="nhac.mp3" loop></audio>
+  <button id="music-toggle">🔊</button>
 
   <script>
     const music = document.getElementById('bg-music');
-    let started = false;
+    const toggleBtn = document.getElementById('music-toggle');
+    let playing = false;
 
-    // phát nhạc khi click vào bất kỳ chỗ nào
+    // click bất kỳ đâu cũng bật nhạc lần đầu
     document.addEventListener('click', ()=>{
-      if(!started){
+      if(!playing){
         music.play();
-        started = true;
+        playing = true;
+        toggleBtn.textContent = "🔇";
+      }
+    }, { once:true });
+
+    // nút bật/tắt nhạc
+    toggleBtn.addEventListener('click', ()=>{
+      if(playing){
+        music.pause();
+        playing = false;
+        toggleBtn.textContent = "🔊";
+      }else{
+        music.play();
+        playing = true;
+        toggleBtn.textContent = "🔇";
       }
     });
 
